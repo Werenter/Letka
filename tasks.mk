@@ -1,0 +1,2 @@
+TASKS = \
+square_equation\
