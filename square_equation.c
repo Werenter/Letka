@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 struct square_equation_result {
 	double x1, x2;
@@ -11,6 +12,7 @@ struct square_equation_result calc_square_equation(double a, double b, double c)
 double get_input_number(char *prompt);
 void print_square_equation_result(struct square_equation_result result);
 bool is_zero(double val);
+bool will_cont_work(void);
 
 bool is_zero(double val) {
 	if(fabs(val) < 0.0000001) return true;
@@ -78,17 +80,32 @@ void print_square_equation_result(struct square_equation_result result) {
 	}
 }
 
+bool will_cont_work(void) {
+	char buff[8] = {0};
+	printf("Наберите \"yes\", если хотите продолжить, любой другой ответ завершит программу: ");
+	int next = getchar();
+	int pos = 0;
+	bool overflow = false;
+	while(next != EOF && next != '\n') {
+		if(pos < 7) buff[pos++] = (char)next;
+		else overflow = true;
+		next = getchar();
+	}
+	buff[7] = '\0';
+	if(!overflow && strcmp(buff, "yes") == 0) return true;
+	else return false;
+}
+
 int main(void) {
 	// ax^2 + bx + c = 0
 	puts("Добро пожаловать в программу для решения\n"
 	     "квадратных уравнений вида ax²+bx+c=0");
-	while(true) {
+	do {
 		double a = get_input_number("Введите коэффициент a");
 		double b = get_input_number("Введите коэффициент b");
 		double c = get_input_number("Введите коэффициент c");
 		struct square_equation_result result = calc_square_equation(a, b, c);
 		print_square_equation_result(result);
-		puts("Введите новое уравнение, или нажмите Ctrl-C для завершения");
-	}
+	} while(will_cont_work());
 	return 0;
 }
