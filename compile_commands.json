@@ -48,7 +48,6 @@
       "-fcheck-new",
       "-fstack-protector",
       "-fstrict-overflow",
-      "-flto-odr-type-merging",
       "-fno-omit-frame-pointer",
       "-Wlarger-than=8192",
       "-Wstack-usage=8192",
