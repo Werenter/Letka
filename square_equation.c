@@ -31,8 +31,17 @@ double get_input_number(char *prompt) {
 			printf("Incorrect input format, use x.y notation for numbers\n");
 			while(getchar() != '\n') {}
 		} else {
-			while(getchar() != '\n') {}
-			return input;
+			int next;
+			bool flag = false;
+			do {
+				next = getchar();
+				if(next != '\n' && next != ' ' && next != '\t') flag = true;
+			} while(next != '\n');
+			if(flag) {
+				printf("Incorrect input format, use x.y notation for numbers\n");
+			} else {
+				return input;
+			}
 		}
 	}
 }
@@ -80,20 +89,31 @@ void print_square_equation_result(struct square_equation_result result) {
 	}
 }
 
+#define BUFF_SIZE 128
+
 bool will_cont_work(void) {
-	char buff[8] = {0};
+	char buff[BUFF_SIZE] = {0};
 	printf("Наберите \"yes\", если хотите продолжить, любой другой ответ завершит программу: ");
-	int next = getchar();
-	int pos = 0;
-	bool overflow = false;
-	while(next != EOF && next != '\n') {
-		if(pos < 7) buff[pos++] = (char)next;
-		else overflow = true;
-		next = getchar();
+	char *result = fgets(buff, BUFF_SIZE, stdin);
+	if(result == NULL) {
+		puts("Input read error");
+		return false;
 	}
-	buff[7] = '\0';
-	if(!overflow && strcmp(buff, "yes") == 0) return true;
-	else return false;
+	if(strcmp(buff, "yes\n") == 0) return true;
+	else {
+		// Проверяем, остались ли в потоке символы
+		bool flag = false;
+		for(size_t i = 0; i < BUFF_SIZE; i++) {
+			if(buff[i] == '\n') {
+				flag = true;
+				break;
+			}
+		}
+		if(!flag) {
+			while(getchar() != '\n') {}
+		}
+		return false;
+	}
 }
 
 int main(void) {
