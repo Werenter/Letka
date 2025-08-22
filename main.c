@@ -2,6 +2,7 @@
 
 #include "sq_io.h"
 #include "square_equation.h"
+#include "cool_assert.h"
 
 int main(void) {
 	// ax^2 + bx + c = 0

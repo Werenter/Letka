@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include "cool_assert.h"
+#include <ctype.h>
+#include <assert.h>
 
 // Очистка ввода 
 void clear_stdin(void) {
@@ -15,13 +18,14 @@ Flag_type clear_stdin_with_check(void) {
 	Flag_type flag = FLAG_OK;
 	do {
 		next = getchar();
-		if(next != '\n' && next != ' ' && next != '\t') flag = FLAG_BAD; // Есть станадртная функция
+		if(!isspace(next)) flag = FLAG_BAD;
 	} while(next != '\n');
 	return flag;
 }
 
 int get_input_number(const char *prompt, double *var) {
-	// assert(...)
+	hard_assert(prompt != NULL, "get_input_number got NULL pointer");
+	hard_assert(var != NULL, "get_input_number got NULL pointer");
 	double input = NAN;
 	while(true) {
 		printf("Введите коэффициент %s: ", prompt);
@@ -46,14 +50,22 @@ int get_input_number(const char *prompt, double *var) {
 }
 
 void print_square_equation_result(square_equation_result *result) {
-	if(result->result == TWO_ROOTS) {
-		printf("Корни уравнения: %.10lf %.10lf\n", result->x1, result->x2);
-	} else if(result->result == ONE_ROOT) {
-		printf("Корень уравнения: %.10lf\n", result->x1);
-	} else if(result->result == NO_ROOTS) {
-		puts("Уравнение не имеет действительных корней");
-	} else if(result->result == INF_ROOTS) {
-		puts("Корнем уравнения является любое действительное число");
+	hard_assert(result != NULL, "print_square_equation_result got NULL pointer");
+	switch(result->result) {
+		case TWO_ROOTS:
+			printf("Корни уравнения: %.10lf %.10lf\n", result->x1, result->x2);
+			break;
+		case ONE_ROOT:
+			printf("Корень уравнения: %.10lf\n", result->x1);
+			break;
+		case NO_ROOTS:
+			puts("Уравнение не имеет действительных корней");
+			break;
+		case INF_ROOTS:
+			puts("Корнем уравнения является любое действительное число");
+			break;
+		default:
+			soft_assert(0, "Incorrect enum value in print_square_equation_result");
 	}
 }
 

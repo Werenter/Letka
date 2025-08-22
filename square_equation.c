@@ -5,7 +5,7 @@
 
 square_equation_result calc_linear_equation(const double, const double b, const double c) {
 	square_equation_result result = {
-		.x1 = 0.0, .x2 = 0.0, .result = NO_ROOTS
+		.x1 = NAN, .x2 = NAN, .result = NO_ROOTS
 	};
 	if(is_zero(b)) {
 		if(is_zero(c)) {
@@ -23,7 +23,7 @@ square_equation_result calc_linear_equation(const double, const double b, const 
 
 square_equation_result calc_only_square_equation(const double a, const double b, const double c) {
 	square_equation_result result = {
-		.x1 = 0.0, .x2 = 0.0, .result = NO_ROOTS
+		.x1 = NAN, .x2 = NAN, .result = NO_ROOTS
 	};
 	double discriminant = b*b-4*a*c;
 	if(is_zero(discriminant)) {
@@ -42,13 +42,9 @@ square_equation_result calc_only_square_equation(const double a, const double b,
 }
 
 square_equation_result calc_square_equation(const double a, const double b, const double c) {
-	square_equation_result result = {
-		.x1 = 0.0, .x2 = 0.0, .result = NO_ROOTS
-	};
 	if(is_zero(a)) {
-		result = calc_linear_equation(a, b, c);
+		return calc_linear_equation(a, b, c);
 	} else {
-		result = calc_only_square_equation(a, b, c);
+		return calc_only_square_equation(a, b, c);
 	}
-	return result;
 }
