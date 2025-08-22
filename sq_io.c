@@ -49,6 +49,18 @@ int get_input_number(const char *prompt, double *var) {
 	}
 }
 
+int get_input_coefficients(coefficients_type *coefficients) {
+	hard_assert(coefficients != NULL, "Got NULL struct in get_input_coefficients");
+	int res = 0;
+	res = get_input_number("a", &coefficients->a);
+	if(res != 0) return 1;
+	res = get_input_number("b", &coefficients->b);
+	if(res != 0) return 1;
+	res = get_input_number("c", &coefficients->c);
+	if(res != 0) return 1;
+	return 0;
+}
+
 void print_square_equation_result(square_equation_result *result) {
 	hard_assert(result != NULL, "print_square_equation_result got NULL pointer");
 	switch(result->result) {
