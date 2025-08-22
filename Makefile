@@ -1,11 +1,14 @@
 include config.mk
 
-.PHONY : all
+.PHONY : all docs
 
 SOURCES=$(wildcard *.c)
 OBJECTS=$(SOURCES:.c=.o)
 
 all: square_equation
+
+docs:
+	doxygen doxygen_config
 
 clean: 
 	rm -rf *.o square_equation

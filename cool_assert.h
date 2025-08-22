@@ -47,18 +47,27 @@
 #else // DEBUG || _DEBUG
 
 /**
- * This functions checks if value is equal or
- * very close to zero
+ * This macros works as assert, but it allows print
+ * custom message. (soft version)
+ *
+ * Soft assert finish program only with flag -DHARD_ASSERTS
+ * and asserts enabled (-DDEBUG)
  * 
- * @param [double] val Value for checking
+ * @param [in] COND Conditition for checking
+ * @param [in] MESSAGE_FORMAT Format for error message
+ * @param [in] VA_ARGS - arguments for error message format
  */
 #define soft_assert(COND, MESSAGE_FORMAT, ...) (void)0
 
 /**
- * This functions checks if value is equal or
- * very close to zero
+ * This macros works as assert, but it allows print
+ * custom message. (hard version)
+ *
+ * Hard assert finish program always when asserts enabled (-DDEBUG)
  * 
- * @param [double] val Value for checking
+ * @param [in] COND Conditition for checking
+ * @param [in] MESSAGE_FORMAT Format for error message
+ * @param [in] VA_ARGS - arguments for error message format
  */
 #define hard_assert(COND, MESSAGE_FORMAT, ...) (void)0
 #endif // DEBUG || _DEBUG
