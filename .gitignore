@@ -1,3 +1,5 @@
 .cache
 square_equation
 *.o
+html
+latex

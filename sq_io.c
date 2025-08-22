@@ -83,7 +83,7 @@ void print_square_equation_result(square_equation_result *result) {
 
 #define BUFF_SIZE 128
 
-bool will_cont_work(void) {
+bool prompt_user_to_continue(void) {
 	char buff[BUFF_SIZE] = {0};
 	printf("Наберите \"yes\", если хотите продолжить, любой другой ответ завершит программу: ");
 	char *result = fgets(buff, BUFF_SIZE, stdin);
