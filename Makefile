@@ -1,14 +1,13 @@
 include config.mk
-include tasks.mk
 
 .PHONY : all
 
-all: $(TASKS)
+all: square_equation
 
 clean: 
-	rm -rf $(TASKS)
+	rm -rf *.o square_equation
 
-add_task:
-	echo "$(TASK_NAME)\\" >> tasks.mk
-	cp template.c $(TASK_NAME).c
-	echo "$(TASK_NAME)" >> .gitignore
+square_equation: main.o
+	$(CC) -o $@ $^ $(CFLAGS)
+
+main.o: main.c

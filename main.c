@@ -132,10 +132,12 @@ square_equation_result calc_square_equation(const double a, const double b, cons
 	square_equation_result result = {
 		.x1 = 0.0, .x2 = 0.0, .result = NO_ROOTS
 	};
-	if(is_zero(a))
-		return calc_linear_equation(a, b, c);
-
-	return calc_only_square_equation(a, b, c);
+	if(is_zero(a)) {
+		result = calc_linear_equation(a, b, c);
+	} else {
+		result = calc_only_square_equation(a, b, c);
+	}
+	return result;
 }
 
 void print_square_equation_result(square_equation_result *result) {

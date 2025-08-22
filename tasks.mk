@@ -1,2 +1,0 @@
-TASKS = \
-square_equation\
