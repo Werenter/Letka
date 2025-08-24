@@ -6,7 +6,7 @@
 // TODO: Makefile с зависимостями от header'ов
 int main(int argc, char **argv) {
 	if(argc != 3) {
-		printf("Use format: %s is_zero_test_data square_equation_test_data\n", argv[0]);
+		printf("Use format: ./tests is_zero_test_data square_equation_test_data\n");
 		return 1;
 	}
 	Status_type result = STATUS_BAD_UNKNOWN;
