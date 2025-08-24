@@ -7,48 +7,86 @@
 #include <ctype.h>
 #include <assert.h>
 
+#define BUFF_SIZE 128
+
 // Очистка ввода 
-void clear_stdin(void) {
-	while(getchar() != '\n') {}
+void skip_line(void) {
+	int next = 0;
+	do {
+		next = getchar();
+	} while(next != '\n' && next != EOF);
 }
 
 // Очистка ввода с проверкой наличия лишних символов
-Flag_type clear_stdin_with_check(void) {
+Status_type skip_line_with_check(void) {
 	int next = 0;
-	Flag_type flag = FLAG_OK;
+	Status_type flag = STATUS_OK;
 	do {
 		next = getchar();
-		if(!isspace(next)) flag = FLAG_BAD;
-	} while(next != '\n');
+		if(!isspace(next)) flag = STATUS_CHECK_FAILED;
+	} while(next != '\n' && next != EOF);
 	return flag;
 }
 
-int get_input_number(const char *prompt, double *var) {
-	hard_assert(prompt != NULL, "get_input_number got NULL pointer");
-	hard_assert(var != NULL, "get_input_number got NULL pointer");
-	double input = NAN;
-	while(true) {
-		printf("Введите коэффициент %s: ", prompt);
-		int scanf_count = scanf("%lf", &input);
-		if(scanf_count == EOF) {
-			printf("Got EOF while reading input\n");
-			*var = 0.0;
-			return 1;
-		} else if(scanf_count != 1) {
-			printf("Incorrect input format, use x.y notation for numbers\n");
-			clear_stdin();
+Status_type get_line(char *buff, int buffsize) {
+	char *result = fgets(buff, buffsize, stdin);
+	if(result == NULL) {
+		fputs("Input read error\n", stderr);
+		return STATUS_EOF;
+	} else {
+		// Проверяем, остались ли в потоке символы
+		char *pos = strchr(buff, '\n');
+		if(pos == NULL) {
+			skip_line();
+			return STATUS_OVERFLOW;
 		} else {
-			Flag_type flag = clear_stdin_with_check();
-			if(flag == FLAG_BAD) {
-				printf("Incorrect input format, use x.y notation for numbers\n");
-			} else {
-				*var = input;
-				return 0;
-			}
+			return STATUS_OK;
 		}
 	}
 }
 
+int get_input_number(const char *prompt, double *var) {
+	hard_assert(prompt != NULL, "get_input_number got NULL pointer");
+	hard_assert(var    != NULL, "get_input_number got NULL pointer");
+	*var = NAN; 
+
+	while(true) {
+		double number = NAN;
+		printf("Введите коэффициент %s: ", prompt);
+		char buff[BUFF_SIZE] = {0};
+		Status_type result = get_line(buff, BUFF_SIZE);
+		if(result == STATUS_OVERFLOW) {
+			puts("To many symbols");
+			continue;
+		} else if(result == STATUS_EOF) {
+			puts("Got EOF on input");
+			return 1;
+		}
+
+		int character_count = 0;
+		int scanf_count = sscanf(buff, "%lf%n", &number, &character_count);
+		bool is_valid_string = true;
+		if(scanf_count == 1) { // TODO: в функцию
+			for(int i = character_count; i < BUFF_SIZE; i++) {
+				if(!isspace(buff[i]) && buff[i] != '\0') {
+					is_valid_string = false;
+				}
+			}
+		} else {
+			is_valid_string = false;
+		}
+		if(is_valid_string) {
+			*var = number;
+			return 0;
+		} else {
+			printf("Incorrect input format, use x.y notation for numbers\n");
+			*var = NAN;
+		}
+	}
+}
+
+// TODO: remove copypaste bez define'ov
+// tol'ko ostav' etu function (aos)
 int get_input_coefficients(coefficients_type *coefficients) {
 	hard_assert(coefficients != NULL, "Got NULL struct in get_input_coefficients");
 	int res = 0;
@@ -61,9 +99,9 @@ int get_input_coefficients(coefficients_type *coefficients) {
 	return 0;
 }
 
-void print_square_equation_result(square_equation_result *result) {
+void print_square_equation_result(const square_equation_result *result) {
 	hard_assert(result != NULL, "print_square_equation_result got NULL pointer");
-	switch(result->result) {
+	switch(result->roots_count) {
 		case TWO_ROOTS:
 			printf("Корни уравнения: %.10lf %.10lf\n", result->x1, result->x2);
 			break;
@@ -81,24 +119,64 @@ void print_square_equation_result(square_equation_result *result) {
 	}
 }
 
-#define BUFF_SIZE 128
-
 bool prompt_user_to_continue(void) {
-	char buff[BUFF_SIZE] = {0};
+	char buff[BUFF_SIZE];
 	printf("Наберите \"yes\", если хотите продолжить, любой другой ответ завершит программу: ");
-	char *result = fgets(buff, BUFF_SIZE, stdin);
-	if(result == NULL) {
-		puts("Input read error");
-		return false;
+	Status_type result = get_line(buff, BUFF_SIZE);
+	if(result != STATUS_OK) return false;
+
+	char *pos = strstr(buff, "yes");
+	if(pos == NULL) return false;
+
+	for(int i = 0; i < 3; i++) pos[i] = ' ';
+
+	for(int i = 0; i < BUFF_SIZE; i++) {
+		if(buff[i] == '\0') break;
+		if(!isspace(buff[i])) return false;
 	}
-	if(strcmp(buff, "yes\n") == 0) return true;
-	else {
-		// Проверяем, остались ли в потоке символы
-		char *pos = strchr(buff, '\n');
-		if(pos == NULL) {
-			clear_stdin();
-		}
-		return false;
-	}
+	return true;
 }
 
+Status_type read_file(const char *path, char **read_buffer) {
+	hard_assert(path != NULL, "read_file has NULL pointer");
+	hard_assert(read_buffer != NULL, "read_file has NULL pointer");
+
+	FILE *file = fopen(path, "r");
+	if(file == NULL) return STATUS_READ_ERROR;
+
+	long filesize = get_filesize(file);
+	if(filesize < 0) {
+		fclose(file);
+		return STATUS_READ_ERROR;
+	}
+
+	char *memory_block = calloc((unsigned long)filesize+1, sizeof(char));
+	if(memory_block == NULL) {
+		fclose(file);
+		return STATUS_READ_ERROR;
+	}
+
+	fread(memory_block, sizeof(char), (unsigned long)filesize, file);
+	if(ferror(file)) {
+		fclose(file);
+		free(memory_block);
+		return STATUS_READ_ERROR;
+	}
+
+	fclose(file);
+
+	*read_buffer = memory_block;
+	return STATUS_OK;
+}
+
+long get_filesize(FILE *file) {
+	int status = fseek(file, 0, SEEK_END);
+	if(status < 0) return -1;
+
+	long filesize = ftell(file);
+	if(filesize < 0) return -1;
+
+	status = fseek(file, 0, SEEK_SET);
+	if(status < 0) return -1;
+	return filesize;
+}

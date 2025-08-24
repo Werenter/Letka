@@ -3,3 +3,4 @@ square_equation
 *.o
 html
 latex
+objects.mk

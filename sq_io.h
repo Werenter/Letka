@@ -2,6 +2,8 @@
 
 #include "sq_typedefs.h"
 
+#include <stdio.h>
+
 /**
  * @brief This function gets input coefficient from user
  * 
@@ -25,7 +27,7 @@ int get_input_coefficients(coefficients_type *coefficients);
  * 
  * @param [in] coefficients Pointer to struct with equation result.
  */
-void print_square_equation_result(square_equation_result *result);
+void print_square_equation_result(const square_equation_result *result);
 
 /**
  * @brief Ask user, continue work or end program.
@@ -41,7 +43,7 @@ bool prompt_user_to_continue(void);
  * It can be used for cleaning input when bad input have been given.
  * 
  */
-void clear_stdin(void);
+void skip_line(void);
 
 
 /**
@@ -50,8 +52,48 @@ void clear_stdin(void);
  * It drops characters from stdin while '\\n' not found.
  * It can be used for cleaning input when bad input have been given.
  * Also it checks for non-space symbols on stream found when cleaning.
- * FLAG_OK returned if only space characters found, else FLAG_BAD returned.
+ * STATUS_OK returned if only space characters found, else STATUS_CHECK_FAILED returned.
  * 
- * @return [Flag_type] Check status
+ * @return [Status_type] Check status
  */
-Flag_type clear_stdin_with_check(void);
+Status_type skip_line_with_check(void);
+
+/**
+ * @brief This function gets input line
+ *
+ * Data from user will be written
+ * to buff, but not more, than buffsize.
+ *
+ * @param [out] buff Buffer for input data
+ * @param [in] buffsize Size of buffer
+ * 
+ * @return [Status_type] STATUS_OVERFLOW returned if buffer to small and
+ * data was truncted. In EOF case, STATUS_EOF returned, STATUS_OK returned if all is good
+ */
+Status_type get_line(char *buff, int buffsize);
+
+/**
+ * @brief This function allocate memory block and reads
+ * file given by path to it.
+ *
+ * In case of errors memory will be not allcated (free on buffer
+ * will become an error).
+ *
+ * @param [in] path Path to file (for fopen)
+ * @param [out] read_buffer Pointer to pointer for allocated buffer and input data
+ * 
+ * @return [Status_type] STATUS_OK returned if all work,
+ * STATUS_READ_ERROR if any errors occured.
+ */
+Status_type read_file(const char *path, char **read_buffer);
+
+/**
+ * @brief Get size of open file
+ *
+ * Warning: this function moves lseek to begin
+ *
+ * @param [in] file FILE* structure with opened file
+ * 
+ * @return Filesize if OK, -1 if error
+ */
+long get_filesize(FILE *file);

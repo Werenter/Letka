@@ -4,9 +4,14 @@
  * Typedef enum for return values
  */
 typedef enum {
-	FLAG_OK, ///< All is ok.
-	FLAG_BAD ///< All is bad.
-} Flag_type;
+	STATUS_OK,  ///< All is ok.
+	STATUS_BAD_UNKNOWN, ///< All is bad.
+	STATUS_EOF, ///< For input functions, used when EOF was found
+	STATUS_CHECK_FAILED, ///< Used when checks return bad result
+	STATUS_OVERFLOW, ///< For functions with limited buffers, buffer overflow
+	STATUS_TEST_FAILED, ///< For tests, test is failed
+	STATUS_READ_ERROR   ///< IO read error
+} Status_type;
 
 /**
  * Typedef struct for ax^2+bx+c=0 coefficients
@@ -46,5 +51,5 @@ typedef struct {
 		ONE_ROOT,  ///< Equation has one root.
 		TWO_ROOTS, ///< Equation has two roots.
 		INF_ROOTS  ///< Equation has infinity roots.
-	} result;
+	} roots_count;
 } square_equation_result;
