@@ -23,6 +23,16 @@ int get_input_number(const char *coef_name, double *var);
 int get_input_coefficients(coefficients_type *coefficients);
 
 /**
+ * @brief This function gets all coefficients from array
+ * of strings (size must be at least 3)
+ *
+ * @param [in] string_array Array of strings with coefficients
+ * @param [out] coefficients Pointer to struct for equation coefficients.
+ * @return Status 0 is OK, 1 is BAD
+ */
+int get_input_coefficients_from_array(const char **string_array, coefficients_type *coefficients);
+
+/**
  * @brief Print equation answer to user.
  * 
  * @param [in] coefficients Pointer to struct with equation result.

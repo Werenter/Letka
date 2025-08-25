@@ -14,3 +14,4 @@ clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C apps/tests clean
 	$(MAKE) -C apps/square_equation clean
+	rm square_equation tests

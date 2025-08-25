@@ -85,16 +85,26 @@ int get_input_number(const char *prompt, double *var) {
 	}
 }
 
+int get_input_coefficients_from_array(const char **string_array, coefficients_type *coefficients) {
+	assert(string_array != NULL);
+	assert(coefficients != NULL);
+	assert(string_array[0] != NULL);
+	if(sscanf(string_array[0], "%lf", &coefficients->a) != 1) return 1;
+	assert(string_array[0] != NULL);
+	if(sscanf(string_array[1], "%lf", &coefficients->b) != 1) return 1;
+	assert(string_array[0] != NULL);
+	if(sscanf(string_array[2], "%lf", &coefficients->c) != 1) return 1;
+	return 0;
+}
+
 // TODO: remove copypaste bez define'ov
 // tol'ko ostav' etu function (aos)
 int get_input_coefficients(coefficients_type *coefficients) {
 	hard_assert(coefficients != NULL, "Got NULL struct in get_input_coefficients");
 	int res = 0;
-	res = get_input_number("a", &coefficients->a);
-	if(res != 0) return 1;
-	res = get_input_number("b", &coefficients->b);
-	if(res != 0) return 1;
-	res = get_input_number("c", &coefficients->c);
+	res |= get_input_number("a", &coefficients->a);
+	res |= get_input_number("b", &coefficients->b);
+	res |= get_input_number("c", &coefficients->c);
 	if(res != 0) return 1;
 	return 0;
 }

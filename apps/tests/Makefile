@@ -9,7 +9,7 @@ SOURCES := tests.c tests_main.c
 OBJECTS := $(SOURCES:.c=.o)
 
 %:
-	$(CC) -MM *.c -o objects.mk $(INCLUDES)
+	$(CC) -MM $(SOURCES) $(INCLUDES) > objects.mk
 
 all: tests
 

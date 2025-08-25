@@ -5,8 +5,11 @@ include ../config.mk
 INCLUDES = -I../include
 CFLAGS += $(INCLUDES)
 
+SOURCES := float.c square_equation.c sq_io.c arg_parse.c
+OBJECTS := $(SOURCES:.c=.o)
+
 %:
-	$(CC) -MM *.c -o objects.mk $(INCLUDES)
+	$(CC) -MM $(SOURCES) $(INCLUDES) > objects.mk
 
 all: libsquare_equation.a
 
@@ -15,7 +18,7 @@ clean:
 	rm -f objects.mk
 	rm -f *.o
 
-libsquare_equation.a: float.o square_equation.o sq_io.o
+libsquare_equation.a: $(OBJECTS)
 	$(AR) r $@ $^
 
 include objects.mk

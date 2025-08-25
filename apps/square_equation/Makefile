@@ -5,8 +5,11 @@ include ../../config.mk
 INCLUDES = -I../../include
 CFLAGS += $(INCLUDES)
 
+SOURCES := main.c
+OBJECTS := $(SOURCES:.c=.o)
+
 %:
-	$(CC) -MM *.c -o objects.mk $(INCLUDES)
+	$(CC) -MM $(SOURCES) $(INCLUDES) > objects.mk
 
 all: square_equation
 
@@ -15,7 +18,7 @@ clean:
 	rm -f objects.mk
 	rm -f *.o
 
-square_equation: main.o ../../src/libsquare_equation.a
+square_equation: $(OBJECTS) ../../src/libsquare_equation.a
 	$(CC) -lm $(CFLAGS) -o $@ $^
 	cp square_equation ../../
 
