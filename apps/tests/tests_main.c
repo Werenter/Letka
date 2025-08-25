@@ -7,7 +7,7 @@
 int main(int argc, char **argv) {
 	if(argc != 3) {
 		printf("Use format: ./tests is_zero_test_data square_equation_test_data\n");
-		return 1;
+		return 1; // ./tests --tests=is_zero_test_data,square_equation_test_data
 	}
 	Status_type result = STATUS_BAD_UNKNOWN;
 	result = is_zero_test(argv[1]);

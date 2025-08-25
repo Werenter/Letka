@@ -5,6 +5,9 @@ include ../../config.mk
 INCLUDES = -I../../include
 CFLAGS += $(INCLUDES)
 
+SOURCES := tests.c tests_main.c
+OBJECTS := $(SOURCES:.c=.o)
+
 %:
 	$(CC) -MM *.c -o objects.mk $(INCLUDES)
 
@@ -15,7 +18,7 @@ clean:
 	rm -f objects.mk
 	rm -f *.o
 
-tests: tests.o tests_main.o ../../src/libsquare_equation.a
+tests: $(OBJECTS) ../../src/libsquare_equation.a
 	$(CC) -lm $(CFLAGS) -o $@ $^
 	cp tests ../../
 
