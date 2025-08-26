@@ -3,8 +3,8 @@
 #include "tests.h"
 #include "arg_parse.h"
 
-// TODO: аргументы командной строки
-// TODO: Makefile с зависимостями от header'ов
+
+
 int main(int argc, const char **argv) {
 	int ret = 0;
 	Status_type result = STATUS_BAD_UNKNOWN;
@@ -14,6 +14,7 @@ int main(int argc, const char **argv) {
 		     "  --square-equation-test filename  -  путь к тестовым данным для квадратного уравнения");
 		return 0;
 	}
+	// --tests zero,square
 	const char *is_zero_filename = argparse_get_flag_argument(argc, argv, "--zero-test");
 	if(is_zero_filename != NULL) {
 		result = is_zero_test(is_zero_filename);

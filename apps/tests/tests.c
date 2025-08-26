@@ -10,8 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ARRAY_LENGTH(arr) sizeof(arr)/sizeof(arr[0])
-
 typedef struct {
 	double val;
 	int result;

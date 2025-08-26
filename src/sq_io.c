@@ -29,6 +29,7 @@ Status_type skip_line_with_check(void) {
 }
 
 Status_type get_line(char *buff, int buffsize) {
+	assert(buff != NULL);
 	char *result = fgets(buff, buffsize, stdin);
 	if(result == NULL) {
 		fputs("Input read error\n", stderr);

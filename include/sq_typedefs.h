@@ -10,7 +10,8 @@ typedef enum {
 	STATUS_CHECK_FAILED, ///< Used when checks return bad result
 	STATUS_OVERFLOW, ///< For functions with limited buffers, buffer overflow
 	STATUS_TEST_FAILED, ///< For tests, test is failed
-	STATUS_READ_ERROR   ///< IO read error
+	STATUS_READ_ERROR,  ///< IO read error
+	STATUS_ARG_PARSE_ERROR ///< Command line argument parsing error
 } Status_type;
 
 /**
@@ -53,3 +54,6 @@ typedef struct {
 		INF_ROOTS  ///< Equation has infinity roots.
 	} roots_count;
 } square_equation_result;
+
+#define ARRAY_LENGTH(arr) sizeof(arr)/sizeof(arr[0])
+#define UNUSED(x) (void)x
