@@ -2,6 +2,7 @@
 #include <math.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #include "sq_io.h"
 #include "square_equation.h"
@@ -15,6 +16,8 @@ static bool will_print_help = false; // move to main()
 
 static bool cli_coefficients_set = false;
 static coefficients_type cli_coefficients = { NAN, NAN, NAN };
+
+static void cleanup_and_exit_on_signal(int sig);
 
 const command_line_arg cmdline_argument_array[] = {
 	{
@@ -33,7 +36,18 @@ const command_line_arg cmdline_argument_array[] = {
 	}
 };
 
+static const int signals[] = {
+	SIGINT,
+	SIGHUP,
+	SIGTERM
+};
+
 int main(int argc, const char **argv) {
+	for(size_t i = 0; i < ARRAY_LENGTH(signals); i++) {
+		signal(signals[i], cleanup_and_exit_on_signal);
+	}
+	set_html_logs(".");
+
 	FILE *testlog = fopen("testlog.log", "a");
 	FILE *filelist[] = { stderr, testlog };
 	set_logfile_list(ARRAY_LENGTH(filelist), filelist);
@@ -69,6 +83,8 @@ int main(int argc, const char **argv) {
 			print_square_equation_result(&result);
 		} while(prompt_user_to_continue());
 	}
+
+	html_cleanup();
 	colored_fprintf(RED, stdout, "\e[5mCOMMIT CODEBERG!!!!!!!!!!!!!!!!\e[m\n");
 	fclose(testlog);
 	return 0;
@@ -96,4 +112,10 @@ static Status_type coefficients_argument_callback(const int argc, const char *co
 		cli_coefficients_set = true;
 		return STATUS_OK;
 	}
+}
+
+static void cleanup_and_exit_on_signal(int sig) {
+	printf("Reseived signal %i, exiting.\n", sig);
+	html_cleanup();
+	exit(0);
 }

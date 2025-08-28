@@ -11,7 +11,8 @@ typedef enum {
 	STATUS_OVERFLOW, ///< For functions with limited buffers, buffer overflow
 	STATUS_TEST_FAILED, ///< For tests, test is failed
 	STATUS_READ_ERROR,  ///< IO read error
-	STATUS_ARG_PARSE_ERROR ///< Command line argument parsing error
+	STATUS_ARG_PARSE_ERROR, ///< Command line argument parsing error
+	STATUS_FILE_OPEN_ERROR ///< File open not successful
 } Status_type;
 
 /**
