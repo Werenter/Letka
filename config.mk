@@ -1,14 +1,14 @@
 CFLAGS=\
-	-g -std=c23 -O0 -Wall -Wextra -Waggressive-loop-optimizations \
+	-g -std=c23 -O0 -Wall -Wextra -Waggressive-loop-optimizations -D_POSIX_SOURCE \
 	-Wmissing-declarations -Wcast-align -Wcast-qual -Wchar-subscripts -Wconversion \
 	-Wempty-body -Wfloat-equal -Wformat-nonliteral -Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wlogical-op \
 	-Wopenmp-simd -Wpacked -Wpointer-arith -Winit-self -Wredundant-decls -Wshadow \
 	-Wsign-conversion -Wstrict-overflow=2 -Wsuggest-attribute=noreturn \
 	-Wsuggest-final-methods -Wsuggest-final-types -Wswitch-default -Wswitch-enum -Wsync-nand -Wundef \
 	-Wunreachable-code -Wunused -Wuseless-cast -Wvariadic-macros -Wno-missing-field-initializers \
-	-Wno-narrowing -Wno-varargs -fcheck-new -fstack-protector \
+	-Wno-narrowing -Wno-varargs -fcheck-new -fstack-protector -Wno-format-nonliteral \
 	-fstrict-overflow -fno-omit-frame-pointer -Wlarger-than=8192 -pie -fPIE \
 	-fsanitize=address,alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,leak,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr \
-	-DDEBUG
+	-DENABLE_DEBUG
 # -Werror=vla -Wstack-protector  -Wstack-usage=8192
 CXXFLAGS=$(CFLAGS)

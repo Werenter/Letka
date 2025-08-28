@@ -6,6 +6,7 @@
 #include "sq_io.h"
 #include "square_equation.h"
 #include "arg_parse.h"
+#include "logger.h"
 
 static Status_type help_argument_callback(const int argc, const char *const *argv, int *current_pos, void *data);
 static Status_type coefficients_argument_callback(const int argc, const char *const *argv, int *current_pos, void *data);
@@ -33,6 +34,14 @@ const command_line_arg cmdline_argument_array[] = {
 };
 
 int main(int argc, const char **argv) {
+	FILE *testlog = fopen("testlog.log", "a");
+	FILE *filelist[] = { stderr, testlog };
+	set_logfile_list(ARRAY_LENGTH(filelist), filelist);
+	
+	LOG_DEBUG("Test error: %i\n", 42);
+	LOG_INFO("Test error: %i\n", 42);
+	LOG_WARNING("Test error: %i\n", 42);
+	LOG_ERROR("Test error: %i\n", 42);
 	Status_type parse_status = parse_args(argc, argv, ARRAY_LENGTH(cmdline_argument_array), cmdline_argument_array);
 	if(will_print_help) {
 		puts("Это программа для решения квадратных уравнений вида ax²+bx+c=0");
@@ -60,7 +69,8 @@ int main(int argc, const char **argv) {
 			print_square_equation_result(&result);
 		} while(prompt_user_to_continue());
 	}
-	puts("\e[5mCOMMIT GITHUB!!!!!!!!!!!!!!!!\e[m");
+	colored_fprintf(RED, stdout, "\e[5mCOMMIT CODEBERG!!!!!!!!!!!!!!!!\e[m\n");
+	fclose(testlog);
 	return 0;
 }
 

@@ -5,7 +5,7 @@ include ../config.mk
 INCLUDES = -I../include
 CFLAGS += $(INCLUDES)
 
-SOURCES := float.c square_equation.c sq_io.c arg_parse.c
+SOURCES := float.c square_equation.c sq_io.c arg_parse.c logger.c
 OBJECTS := $(SOURCES:.c=.o)
 
 %:
