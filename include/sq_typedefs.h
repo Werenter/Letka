@@ -12,7 +12,8 @@ typedef enum {
 	STATUS_TEST_FAILED, ///< For tests, test is failed
 	STATUS_READ_ERROR,  ///< IO read error
 	STATUS_ARG_PARSE_ERROR, ///< Command line argument parsing error
-	STATUS_FILE_OPEN_ERROR ///< File open not successful
+	STATUS_FILE_OPEN_ERROR, ///< File open not successful
+	STATUS_LOW_PRECISION, ///< Too low precision for calculate
 } Status_type;
 
 /**
@@ -49,10 +50,11 @@ typedef struct {
 	 * Roots count enum.
 	 */
 	enum { 
-		NO_ROOTS,  ///< Equation has no roots.
-		ONE_ROOT,  ///< Equation has one root.
-		TWO_ROOTS, ///< Equation has two roots.
-		INF_ROOTS  ///< Equation has infinity roots.
+		NO_ROOTS,    ///< Equation has no roots.
+		ONE_ROOT,    ///< Equation has one root.
+		TWO_ROOTS,   ///< Equation has two roots.
+		INF_ROOTS,   ///< Equation has infinity roots.
+		CANT_COMPUTE ///< Equation can't be computed in doubles
 	} roots_count;
 } square_equation_result;
 

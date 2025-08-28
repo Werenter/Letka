@@ -125,6 +125,9 @@ void print_square_equation_result(const square_equation_result *result) {
 		case INF_ROOTS:
 			puts("Корнем уравнения является любое действительное число");
 			break;
+		case CANT_COMPUTE:
+			puts("Точность double недостаточна для заданных коэффициентов");
+			break;
 		default:
 			soft_assert(0, "Incorrect enum value in print_square_equation_result");
 	}

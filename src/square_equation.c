@@ -1,6 +1,7 @@
 #include "square_equation.h"
 #include "float.h"
 #include "cool_assert.h"
+#include "logger.h"
 
 #include <math.h>
 
@@ -15,13 +16,34 @@
  */
 static square_equation_result calc_only_square_equation(const coefficients_type *coefficients);
 
+static Status_type check_solution(const coefficients_type *coefficients, const square_equation_result *result) {
+	if(result->roots_count == NO_ROOTS) return STATUS_OK;
+
+	double a = coefficients->a;
+	double b = coefficients->b;
+	double c = coefficients->c;
+	
+	double x1 = result->x1;
+	double x2 = result->x1;
+	if(is_zero(a*x1*x1+b*x1+c) && is_zero(a*x2*x2+b*x2+c)) return STATUS_OK;
+	else return STATUS_LOW_PRECISION;
+}
+
 square_equation_result calc_square_equation(const coefficients_type *coefficients) {
 	hard_assert(coefficients != NULL, "Got NULL struct in calc_square_equation");
+
+	square_equation_result result = {0};
 	if(is_zero(coefficients->a)) {
-		return calc_linear_equation(coefficients);
+		result = calc_linear_equation(coefficients);
 	} else {
-		return calc_only_square_equation(coefficients);
+		result = calc_only_square_equation(coefficients);
 	}
+	if(check_solution(coefficients, &result) != STATUS_OK) {
+		result.roots_count = CANT_COMPUTE;
+		LOG_INFO("To low precision with coefficients (a, b, c): (%lf, %lf, %lf)\n", 
+		         coefficients->a, coefficients->b, coefficients->c);
+	}
+	return result;
 }
 
 square_equation_result calc_linear_equation(const coefficients_type *coefficients) {
