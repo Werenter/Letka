@@ -17,7 +17,7 @@
 static square_equation_result calc_only_square_equation(const coefficients_type *coefficients);
 
 static Status_type check_solution(const coefficients_type *coefficients, const square_equation_result *result) {
-	if(result->roots_count == NO_ROOTS) return STATUS_OK;
+	if(result->roots_count == NO_ROOTS || result->roots_count == INF_ROOTS) return STATUS_OK;
 
 	double a = coefficients->a;
 	double b = coefficients->b;

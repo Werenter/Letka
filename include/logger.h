@@ -14,6 +14,7 @@ typedef enum {
 	CYAN
 } color_type;
 
+#define LOG_LEVEL_SILENT  0
 #define LOG_LEVEL_ERROR   1
 #define LOG_LEVEL_WARNING 2
 #define LOG_LEVEL_INFO    3
@@ -99,7 +100,7 @@ void html_cleanup(void);
 
 #if LOG_LEVEL >= LOG_LEVEL_DEBUG
 
-#define LOG_DEBUG(MESSAGE_FORMAT, ...) generic_log(CYAN, "DEBUG", MESSAGE_FORMAT __VA_OPT__(,) __VA_ARGS__)
+#define LOG_DEBUG(MESSAGE_FORMAT, ...) LOG(CYAN, "DEBUG", MESSAGE_FORMAT __VA_OPT__(,) __VA_ARGS__)
 
 #else
 
@@ -110,7 +111,7 @@ void html_cleanup(void);
 
 #if LOG_LEVEL >= LOG_LEVEL_INFO
 
-#define LOG_INFO(MESSAGE_FORMAT, ...) generic_log(GREEN, "INFO", MESSAGE_FORMAT __VA_OPT__(,) __VA_ARGS__)
+#define LOG_INFO(MESSAGE_FORMAT, ...) LOG(GREEN, "INFO", MESSAGE_FORMAT __VA_OPT__(,) __VA_ARGS__)
 
 #else
 
@@ -122,7 +123,7 @@ void html_cleanup(void);
 
 #if LOG_LEVEL >= LOG_LEVEL_WARNING
 
-#define LOG_WARNING(MESSAGE_FORMAT, ...) generic_log(YELLOW, "WARNING", MESSAGE_FORMAT __VA_OPT__(,) __VA_ARGS__)
+#define LOG_WARNING(MESSAGE_FORMAT, ...) LOG(YELLOW, "WARNING", MESSAGE_FORMAT __VA_OPT__(,) __VA_ARGS__)
 
 #else
 
@@ -133,7 +134,7 @@ void html_cleanup(void);
 
 #if LOG_LEVEL >= LOG_LEVEL_ERROR
 
-#define LOG_ERROR(MESSAGE_FORMAT, ...) generic_log(RED, "ERROR", MESSAGE_FORMAT __VA_OPT__(,) __VA_ARGS__)
+#define LOG_ERROR(MESSAGE_FORMAT, ...) LOG(RED, "ERROR", MESSAGE_FORMAT __VA_OPT__(,) __VA_ARGS__)
 
 #else
 

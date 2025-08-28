@@ -93,11 +93,11 @@ static void generic_log_internal(color_type color, FILE *file, const char *log_p
 	timestruct = localtime(&current_time);
 	assert(timestruct != NULL);
 
-	colored_fprintf(color, file, "[%s]: %.2i.%.2i.%.4i %.2i:%.2i:%.2i ", log_prefix,
+	colored_fprintf(color, file, "%.2i.%.2i.%.4i %.2i:%.2i:%.2i [%s] ",
 	                timestruct->tm_mday, timestruct->tm_mon+1, timestruct->tm_year+1900,
-	                timestruct->tm_hour, timestruct->tm_min, timestruct->tm_sec);
+	                timestruct->tm_hour, timestruct->tm_min, timestruct->tm_sec,
+	                log_prefix);
 	colored_vfprintf(color, file, format, ap);
-	fflush(file);
 }
 
 void generic_log(color_type color, const char *log_prefix, const char *format, ...) {
@@ -150,6 +150,7 @@ Status_type set_html_logs(const char *fileprefix) {
 	free(filename);
 	if(HTML_log == NULL) return STATUS_FILE_OPEN_ERROR;
 	else {
+		setvbuf(HTML_log, NULL, _IONBF, 0);
 		fputs("<!DOCTYPE html>\n"
 		      "<html>\n"
 		      "<head>\n"
@@ -174,7 +175,6 @@ Status_type set_html_logs(const char *fileprefix) {
 		      "</head>\n"
 		      "<body>\n", 
 		      HTML_log);
-		fflush(HTML_log);
 		return STATUS_OK;
 	}
 }
@@ -199,11 +199,11 @@ static void HTML_log_internal(color_type color, const char *log_prefix, const ch
 	timestruct = localtime(&current_time);
 	assert(timestruct != NULL);
 
-	fprintf(HTML_log, "<p class=\"%s\">[%s]: %.2i.%.2i.%.4i %.2i:%.2i:%.2i ",
-	        select_HTML_color(color), log_prefix,
+	fprintf(HTML_log, "<p class=\"%s\">%.2i.%.2i.%.4i %.2i:%.2i:%.2i [%s] ",
+	        select_HTML_color(color),
 	        timestruct->tm_mday, timestruct->tm_mon+1, timestruct->tm_year+1900,
-	        timestruct->tm_hour, timestruct->tm_min, timestruct->tm_sec);
+	        timestruct->tm_hour, timestruct->tm_min, timestruct->tm_sec,
+	        log_prefix);
 	vfprintf(HTML_log, format, ap);
 	fputs("</p>", HTML_log);
-	fflush(HTML_log);
 }

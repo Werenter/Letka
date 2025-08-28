@@ -47,10 +47,6 @@ int main(int argc, const char **argv) {
 		signal(signals[i], cleanup_and_exit_on_signal);
 	}
 	set_html_logs(".");
-
-	FILE *testlog = fopen("testlog.log", "a");
-	FILE *filelist[] = { stderr, testlog };
-	set_logfile_list(ARRAY_LENGTH(filelist), filelist);
 	
 	LOG_DEBUG("Test error: %i\n", 42);
 	LOG_INFO("Test error: %i\n", 42);
@@ -86,7 +82,6 @@ int main(int argc, const char **argv) {
 
 	html_cleanup();
 	colored_fprintf(RED, stdout, "\e[5mCOMMIT CODEBERG!!!!!!!!!!!!!!!!\e[m\n");
-	fclose(testlog);
 	return 0;
 }
 
