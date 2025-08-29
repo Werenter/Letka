@@ -53,11 +53,13 @@ char *velo_strncpy(char *dst, const char *src, size_t dsize) {
 	if(dsize == 0) return dst;
 
 	size_t i = 0;
-	do {
+	while(1) {
 		dst[i] = src[i];
+		if(src[i] == '\0' || i >= dsize) break;
 		i++;
-	} while(src[i] != '\0' && i < dsize-1);
-	for(; i < dsize; i++) {
+	}
+
+	for(; i <= dsize; i++) {
 		dst[i] = '\0';
 	}
 	return dst;
@@ -75,7 +77,7 @@ char *velo_strcat(char *dst, const char *src) {
 char *velo_strncat(char *dst, const char *src, size_t ssize) {
 	size_t movement = velo_strlen(dst);
 	size_t i = 0;
-	for(; i < ssize-1; i++) {
+	for(; i < ssize; i++) {
 		dst[i+movement] = src[i];
 		if(src[i] == '\0') break;
 	}

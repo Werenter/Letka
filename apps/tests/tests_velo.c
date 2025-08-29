@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdlib.h>
 
 #include "tests.h"
 #include "sq_typedefs.h"
@@ -80,7 +81,7 @@ Status_type velo_strcpy_test(void) {
 		char  ref_string[40] = {};
 		strcpy(ref_string, test.s);
 		velo_strcpy(test_string, test.s);
-		if(!memcmp(test_string, ref_string, 40)) {
+		if(memcmp(test_string, ref_string, 40)) {
 			printf("strcpy test failed with data s = %s\n", test.s);
 			result = STATUS_TEST_FAILED;
 		}
@@ -92,11 +93,11 @@ Status_type velo_strncpy_test(void) {
 	Status_type result = STATUS_OK;
 	for(size_t i = 0; i < ARRAY_LENGTH(velo_strcpy_test_data); i++) {
 		strcpy_test test = velo_strcpy_test_data[i];
-		char test_string[5] = {};
-		char  ref_string[5] = {};
+		char test_string[6] = {};
+		char  ref_string[6] = {};
 		strncpy(ref_string, test.s, 5);
 		velo_strncpy(test_string, test.s, 5);
-		if(!memcmp(test_string, ref_string, 5)) {
+		if(memcmp(test_string, ref_string, 5)) {
 			printf("strncpy test failed with data s = %s\n", test.s);
 			result = STATUS_TEST_FAILED;
 		}
@@ -122,7 +123,7 @@ strcat_test velo_strcat_test_data[] = {
 
 Status_type velo_strcat_test(void) {
 	Status_type result = STATUS_OK;
-	for(size_t i = 0; i < ARRAY_LENGTH(velo_strcpy_test_data); i++) {
+	for(size_t i = 0; i < ARRAY_LENGTH(velo_strcat_test_data); i++) {
 		strcat_test test = velo_strcat_test_data[i];
 		char test_string[40] = {};
 		char  ref_string[40] = {};
@@ -130,7 +131,7 @@ Status_type velo_strcat_test(void) {
 		strcat(ref_string, test.second);
 		velo_strcpy(test_string, test.first);
 		velo_strcat(test_string, test.second);
-		if(!memcmp(test_string, ref_string, 40)) {
+		if(memcmp(test_string, ref_string, 40)) {
 			printf("strcat test failed with data first = %s, second = %s\n", test.first, test.second);
 			result = STATUS_TEST_FAILED;
 		}
@@ -140,7 +141,7 @@ Status_type velo_strcat_test(void) {
 
 Status_type velo_strncat_test(void) {
 	Status_type result = STATUS_OK;
-	for(size_t i = 0; i < ARRAY_LENGTH(velo_strcpy_test_data); i++) {
+	for(size_t i = 0; i < ARRAY_LENGTH(velo_strcat_test_data); i++) {
 		strcat_test test = velo_strcat_test_data[i];
 		char test_string[40] = {};
 		char  ref_string[40] = {};
@@ -148,10 +149,42 @@ Status_type velo_strncat_test(void) {
 		strncat(ref_string, test.second, 5);
 		velo_strcpy(test_string, test.first);
 		velo_strncat(test_string, test.second, 5);
-		if(!memcmp(test_string, ref_string, 40)) {
-			printf("strcat test failed with data first = %s, second = %s\n", test.first, test.second);
+		if(memcmp(test_string, ref_string, 40)) {
+			printf("strncat test failed with data first = %s, second = %s\n", test.first, test.second);
+			printf("%s %s\n", ref_string, test_string);
 			result = STATUS_TEST_FAILED;
 		}
+	}
+	return result;
+};
+
+//////////////////////////////////////////////////
+
+typedef struct {
+	const char *s;
+} strdup_test;
+
+strdup_test velo_strdup_test_data[] = {
+	{ .s = "Treetag" },
+	{ .s = "test" },
+	{ .s = "BIG BROTHER WATCHING YOU" },
+	{ .s = "Pupupupu..." },
+	{ .s = "Ban\nBan\nBan\n" },
+	{ .s = "" },
+};
+
+Status_type velo_strdup_test(void) {
+	Status_type result = STATUS_OK;
+	for(size_t i = 0; i < ARRAY_LENGTH(velo_strdup_test_data); i++) {
+		strdup_test test = velo_strdup_test_data[i];
+		char *str_ref = strdup(test.s);
+		char *str_test = velo_strdup(test.s);
+		if(strcmp(str_ref, str_test)) {
+			printf("strdup test failed with data s = %s\n", test.s);
+			result = STATUS_TEST_FAILED;
+		}
+		if(str_ref != NULL) free(str_ref);
+		if(str_test != NULL) free(str_test);
 	}
 	return result;
 };

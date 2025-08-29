@@ -14,3 +14,5 @@ Status_type velo_strncpy_test(void);
 
 Status_type velo_strcat_test(void);
 Status_type velo_strncat_test(void);
+
+Status_type velo_strdup_test(void);

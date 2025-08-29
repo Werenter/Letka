@@ -50,6 +50,8 @@ int main(int argc, const char **argv) {
 
 		STDLIB_TEST(velo_strcat_test);
 		STDLIB_TEST(velo_strncat_test);
+
+		STDLIB_TEST(velo_strdup_test);
 	}
 	printf("%i tests failed.\n", ret);
 	return ret;
