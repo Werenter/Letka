@@ -143,7 +143,8 @@ ssize_t velo_getline(char **lineptr, size_t *n, FILE *stream) {
 	while(1) {
 		// 2 - place for next symbol and null character
 		if(readed_characters+2 >= *n) {
-			*lineptr = realloc(*lineptr, *n);
+			*lineptr = realloc(*lineptr, *n*2);
+			*n *= 2;
 			if(*lineptr == NULL) {
 				velo_errno = ENOMEM;
 				return -1;
