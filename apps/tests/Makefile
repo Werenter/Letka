@@ -5,7 +5,7 @@ include ../../config.mk
 INCLUDES = -I../../include
 CFLAGS += $(INCLUDES)
 
-SOURCES := tests.c tests_main.c
+SOURCES := tests.c tests_main.c tests_velo.c
 OBJECTS := $(SOURCES:.c=.o)
 
 %:
