@@ -48,10 +48,6 @@ int main(int argc, const char **argv) {
 	}
 	set_html_logs(".");
 	
-	LOG_DEBUG("Test error: %i\n", 42);
-	LOG_INFO("Test error: %i\n", 42);
-	LOG_WARNING("Test error: %i\n", 42);
-	LOG_ERROR("Test error: %i\n", 42);
 	Status_type parse_status = parse_args(argc, argv, ARRAY_LENGTH(cmdline_argument_array), cmdline_argument_array);
 	if(will_print_help) {
 		puts("Это программа для решения квадратных уравнений вида ax²+bx+c=0");

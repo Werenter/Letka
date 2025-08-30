@@ -23,3 +23,7 @@ char *velo_fgets(char *s, int size, FILE *stream);
 char *velo_strdup(const char *s);
 
 ssize_t velo_getline(char **lineptr, size_t *n, FILE *stream);
+
+char *velo_strstr(const char *haystack, const char *needle);
+
+char *velo_strtok(char *str, const char *delim);
