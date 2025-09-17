@@ -6,6 +6,8 @@ all:
 	$(MAKE) -C src
 	$(MAKE) -C apps/tests
 	$(MAKE) -C apps/square_equation
+	$(MAKE) -C apps/microgrep
+	$(MAKE) -C apps/onegin
 
 docs:
 	doxygen doxygen_config
@@ -14,4 +16,6 @@ clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C apps/tests clean
 	$(MAKE) -C apps/square_equation clean
-	rm square_equation tests
+	$(MAKE) -C apps/microgrep clean
+	$(MAKE) -C apps/onegin clean
+	rm -f square_equation tests microgrep onegin
