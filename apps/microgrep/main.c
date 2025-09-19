@@ -6,7 +6,6 @@
 #include "velosiped.h"
 #include "arg_parse.h"
 #include "sq_io.h"
-#include "arrays.h"
 
 const char *filename = NULL;
 const char *string_for_search = NULL;
@@ -50,20 +49,6 @@ const command_line_arg cmdline_argument_array[] = {
 };
 
 int main(int argc, const char *const *argv) {
-	triangle_array array = create_triangle_array(26);
-	for(size_t y = 0; y < 26; y++) {
-		for(size_t x = 0; x <= y; x++) {
-			*get_address_of_elem_in_triangle_array(x, y, array) = 'a'+x;
-		}
-	}
-
-	for(size_t y = 0; y < 26; y++) {
-		for(size_t x = 0; x <= y; x++) {
-			putchar(*get_address_of_elem_in_triangle_array(x, y, array));
-		}
-		putchar('\n');
-	}
-	delete_triangle_array(&array);
 
 	Status_type parse_result = parse_args(argc, argv, ARRAY_LENGTH(cmdline_argument_array), cmdline_argument_array);
 	if(parse_result != STATUS_OK || will_print_help || filename == NULL || string_for_search == NULL) {
@@ -73,7 +58,7 @@ int main(int argc, const char *const *argv) {
 	}
 
 	char *file_data;
-	Status_type file_read_result = read_file(filename, &file_data);
+	Status_type file_read_result = read_file(filename, &file_data, NULL);
 	if(file_read_result != STATUS_OK) {
 		puts("File read error");
 		return 1;

@@ -14,6 +14,7 @@ typedef enum {
 	STATUS_ARG_PARSE_ERROR, ///< Command line argument parsing error
 	STATUS_FILE_OPEN_ERROR, ///< File open not successful
 	STATUS_LOW_PRECISION, ///< Too low precision for calculate
+	STATUS_ALLOCATION_ERROR, ///< Failed to allocate memory
 } Status_type;
 
 /**

@@ -20,7 +20,7 @@ static is_zero_test_data read_zero_test_line(const char *line);
 Status_type is_zero_test(const char *path) {
 	Status_type result = STATUS_OK;
 	char *buff = NULL;
-	Status_type read_file_res = read_file(path, &buff);
+	Status_type read_file_res = read_file(path, &buff, NULL);
 	if(read_file_res != STATUS_OK) {
 		puts("Test data file read error");
 		return read_file_res;
@@ -50,7 +50,7 @@ static equation_test_data read_square_test_line(const char *line);
 Status_type calc_square_equation_test(const char *path) {
 	Status_type result = STATUS_OK;
 	char *buff = NULL;
-	Status_type read_file_res = read_file(path, &buff);
+	Status_type read_file_res = read_file(path, &buff, NULL);
 	if(read_file_res != STATUS_OK) {
 		puts("Test data file read error");
 		return read_file_res;

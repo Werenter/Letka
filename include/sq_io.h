@@ -86,16 +86,18 @@ Status_type get_line(char *buff, int buffsize);
  * @brief This function allocate memory block and reads
  * file given by path to it.
  *
- * In case of errors memory will be not allcated (free on buffer
+ * In case of errors memory will be not allocated (free on buffer
  * will become an error).
  *
  * @param [in] path Path to file (for fopen)
  * @param [out] read_buffer Pointer to pointer for allocated buffer and input data
+ * @param [out] file_size Pointer to variable for saving file size (buffer has
+ * size file_size+1 for zero character). Can be NULL if you don't need filesize.
  * 
  * @return [Status_type] STATUS_OK returned if all work,
  * STATUS_READ_ERROR if any errors occured.
  */
-Status_type read_file(const char *path, char **read_buffer);
+Status_type read_file(const char *path, char **read_buffer, size_t *file_size);
 
 /**
  * @brief Get size of open file

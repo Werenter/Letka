@@ -151,7 +151,7 @@ bool prompt_user_to_continue(void) {
 	return true;
 }
 
-Status_type read_file(const char *path, char **read_buffer) {
+Status_type read_file(const char *path, char **read_buffer, size_t *file_size) {
 	hard_assert(path != NULL, "read_file has NULL pointer");
 	hard_assert(read_buffer != NULL, "read_file has NULL pointer");
 
@@ -164,6 +164,7 @@ Status_type read_file(const char *path, char **read_buffer) {
 		return STATUS_READ_ERROR;
 	}
 
+	if(file_size) *file_size = (size_t)filesize;
 	char *memory_block = calloc((unsigned long)filesize+1, sizeof(char));
 	if(memory_block == NULL) {
 		fclose(file);
