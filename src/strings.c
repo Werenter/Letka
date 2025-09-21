@@ -186,29 +186,19 @@ void slowsort(void *base, size_t n, size_t size, int (*compare)(const void *left
 }
 
 static void slow_qsort_internal(void *base, size_t size, int (*compare)(const void *left, const void *right), size_t begin, size_t end) {
-//	puts("Sorting");
-//	printf("Begin index %lu, end index %lu\n", begin, end);
-//	puts("Array before sorting:");
-//	for(size_t i = begin; i < end; i++) {
-//		printf("%i\n", *((int*)base + i));
-//	}
 	if(end-begin <= 1) return;
 
 	size_t central_index = begin+(size_t)rand()%(end-begin);
-//	printf("central_index: %lu\n", central_index);
 	size_t less_count = 0;
 
 	for(size_t i = begin; i < end; i++) {
 		if(compare((uint8_t*)base + size*i, (uint8_t*)base + size*central_index) < 0) less_count++;
 	}
-//	printf("less_count: %lu\n", less_count);
 
-	//fprintf(stderr, "%lu %lu %lu %lu\n", begin, end, less_count, central_index);
 	if(begin + less_count == end) less_count--;
 	memswp((uint8_t*)base + size*central_index, (uint8_t*)base + size*(begin+less_count), size);
 
 	central_index = begin+less_count;
-//	printf("new central_index: %lu\n", central_index);
 
 	for(size_t less_index = begin, big_index = central_index+1; less_index < central_index && big_index < end;) {
 		if(compare((uint8_t*)base + size*less_index, (uint8_t*)base + size*central_index) > 0) {
@@ -219,16 +209,8 @@ static void slow_qsort_internal(void *base, size_t size, int (*compare)(const vo
 		}
 	}
 
-//	puts("Array after sorting:");
-//	for(size_t i = begin; i < end; i++) {
-//		printf("%i\n", *((int*)base + i));
-//	}
 	slow_qsort_internal(base, size, compare, begin, central_index);
 	if(central_index != end) slow_qsort_internal(base, size, compare, central_index+1, end);
-//	puts("Array after recursive sorting:");
-//	for(size_t i = begin; i < end; i++) {
-//		printf("%i\n", *((int*)base + i));
-//	}
 }
 
 void slow_qsort(void *base, size_t n, size_t size, int (*compare)(const void *left, const void *right)) {
