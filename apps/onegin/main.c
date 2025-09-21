@@ -23,8 +23,13 @@ int compare_indexes(const void *left, const void *right) {
 	return *(const char* const*)left < *(const char* const*)right ? -1 : 1;
 }
 
+//int compare_numbers(const void *left, const void *right) {
+//	//printf("%p\n", left);
+//	return *(const int*)left < *(const int*)right ? -1 : 1;
+//}
+
 static void slowsort_string_array(string_array *data, int (*compare)(const void *left, const void *right)) {
-	slowsort(data->index, data->index_size, sizeof(data->index[0]), compare);
+	slow_qsort(data->index, data->index_size, sizeof(data->index[0]), compare);
 }
 
 int main(int argc, const char *const *argv) {
@@ -46,6 +51,8 @@ int main(int argc, const char *const *argv) {
 		return 2;
 	}
 
+//	int sort_data[] = {0, 7, 3, 5, 4, 6, 9, 8, 1, 2};
+//	slow_qsort(sort_data, 10, sizeof(int), compare_numbers);
 	//printf("%p\n", data.index);
 	fputs("Прямой словарь:" "\n", output_file);
 	slowsort_string_array(&data, compare_direct);
@@ -58,14 +65,14 @@ int main(int argc, const char *const *argv) {
 	fputs("\n\n\n\n" "Исходный текст:" "\n", output_file);
 	slowsort_string_array(&data, compare_indexes);
 	write_string_array(data, output_file);
-	fclose(output_file);
 
+	fclose(output_file);
 	clean_string_data(&data);
 
-	char mem1[] = "QWERTYUIOPASDFGHJKLZXCVBNM";
-	char mem2[] = "MNBVCXZLKJHGFDSAPOIUYTREWQ";
-	memswp(mem1+1, mem2, sizeof(mem1)-1);
-	puts(mem1);
-	puts(mem2);
+	//char mem1[] = "QWERTYUIOPASDFGHJKLZXCVBNM\0\0\0\0";
+	//char mem2[] = "MNBVCXZLKJHGFDSAPOIUYTREWQ\0\0\0\0";
+	//memswp(mem1+5, mem2+4, sizeof(mem1)-5);
+	//puts(mem1);
+	//puts(mem2);
 	return 0;
 }

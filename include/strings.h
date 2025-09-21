@@ -78,6 +78,23 @@ int compare_strings_without_special_symbols_reversed(const char *str1, const cha
 void slowsort(void *base, size_t n, size_t size, int (*compare)(const void *left, const void *right));
 
 /**
+ * If you too hurried for waiting, while slowsort ends work
+ * and don't want to use qsort beware of FATAL FAILURE and NIH,
+ * you can use this function!
+ *
+ * It has nlogn complexity, but is is still slower, than qsort.
+ *
+ * API is equal to qsort.
+ *
+ * @param [in,out] base Array for sorting
+ * @param [in] n Array element count
+ * @param [in] size Size of one array element
+ * @param [in] compare Comparasion function, if left greater must return 1,
+ * if right greater must return -1, if equal must return 0.
+ */
+void slow_qsort(void *base, size_t n, size_t size, int (*compare)(const void *left, const void *right));
+
+/**
  * This function saves array of strings to file, strings separated with '\n'.
  *
  * @param [in] string_array Array of writed data

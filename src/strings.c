@@ -3,11 +3,13 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdint.h>
+#include <time.h>
 
 #include "strings.h"
 #include "sq_io.h"
 
 static Status_type create_index(size_t file_len, string_array *data);
+static void slow_qsort_internal(void *base, size_t size, int (*compare)(const void *left, const void *right), size_t begin, size_t end);
 
 static Status_type create_index(size_t file_len, string_array *data) {
 	size_t index_count = 0;
@@ -133,32 +135,37 @@ int compare_strings_without_special_symbols_reversed(const char *str1, const cha
 	}
 }
 
+#define SWAP_MEMORY(type,size,mem1,mem2,idx) {\
+	type temp = *((type*)mem1+idx/size);\
+	*((type*)mem1+idx/size) = *((type*)mem2+idx/size);\
+	*((type*)mem2+idx/size) = temp;\
+	idx += size;\
+}
 
 void memswp(void *mem1, void *mem2, size_t size) {
 	size_t idx = 0;
-	while(idx < size) {
-		if(size-idx >= 8) {
-			uint64_t temp = *((uint64_t*)mem1+idx/8);
-			*((uint64_t*)mem1+idx/8) = *((uint64_t*)mem2+idx/8);
-			*((uint64_t*)mem2+idx/8) = temp;
-			idx += 8;
-		} else if(size-idx >= 4) {
-			uint32_t temp = *((uint32_t*)mem1+idx/4);
-			*((uint32_t*)mem1+idx/4) = *((uint32_t*)mem2+idx/4);
-			*((uint32_t*)mem2+idx/4) = temp;
-			idx += 4;
-		} else if(size-idx >= 2) {
-			uint16_t temp = *((uint16_t*)mem1+idx/2);
-			*((uint16_t*)mem1+idx/2) = *((uint16_t*)mem2+idx/2);
-			*((uint16_t*)mem2+idx/2) = temp;
-			idx += 2;
-		} else {
-			uint8_t temp = *((uint8_t*)mem1+idx);
-			*((uint8_t*)mem1+idx) = *((uint8_t*)mem2+idx);
-			*((uint8_t*)mem2+idx) = temp;
-			idx += 1;
-		}
+	size_t swp64 = 0;
+	size_t swp32 = 0;
+	size_t swp16 = 0;
+	size_t swp8 = 0;
+	size_t temp_size = size;
+	if((size_t)mem1%8 == 0 && (size_t)mem2%8 == 0) {
+		swp64 = temp_size/8;
+		temp_size -= (temp_size/8)*8;
 	}
+	if((size_t)mem1%4 == 0 && (size_t)mem2%4 == 0) {
+		swp32 = temp_size/4;
+		temp_size -= (temp_size/4)*4;
+	}
+	if((size_t)mem1%2 == 0 && (size_t)mem2%2 == 0) {
+		swp16 = temp_size/2;
+		temp_size -= (temp_size/2)*2;
+	}
+	swp8 = temp_size;
+	for(size_t i = 0; i < swp64; i++) SWAP_MEMORY(uint64_t, 8, mem1, mem2, idx);
+	for(size_t i = 0; i < swp32; i++) SWAP_MEMORY(uint32_t, 4, mem1, mem2, idx);
+	for(size_t i = 0; i < swp16; i++) SWAP_MEMORY(uint16_t, 2, mem1, mem2, idx);
+	for(size_t i = 0; i < swp8 ; i++) SWAP_MEMORY(uint8_t , 1, mem1, mem2, idx);
 }
 
 void slowsort(void *base, size_t n, size_t size, int (*compare)(const void *left, const void *right)) {
@@ -176,6 +183,57 @@ void slowsort(void *base, size_t n, size_t size, int (*compare)(const void *left
 		}
 		if(changed_val == false) return;
 	}
+}
+
+static void slow_qsort_internal(void *base, size_t size, int (*compare)(const void *left, const void *right), size_t begin, size_t end) {
+//	puts("Sorting");
+//	printf("Begin index %lu, end index %lu\n", begin, end);
+//	puts("Array before sorting:");
+//	for(size_t i = begin; i < end; i++) {
+//		printf("%i\n", *((int*)base + i));
+//	}
+	if(end-begin <= 1) return;
+
+	size_t central_index = begin+(size_t)rand()%(end-begin);
+//	printf("central_index: %lu\n", central_index);
+	size_t less_count = 0;
+
+	for(size_t i = begin; i < end; i++) {
+		if(compare((uint8_t*)base + size*i, (uint8_t*)base + size*central_index) < 0) less_count++;
+	}
+//	printf("less_count: %lu\n", less_count);
+
+	//fprintf(stderr, "%lu %lu %lu %lu\n", begin, end, less_count, central_index);
+	if(begin + less_count == end) less_count--;
+	memswp((uint8_t*)base + size*central_index, (uint8_t*)base + size*(begin+less_count), size);
+
+	central_index = begin+less_count;
+//	printf("new central_index: %lu\n", central_index);
+
+	for(size_t less_index = begin, big_index = central_index+1; less_index < central_index && big_index < end;) {
+		if(compare((uint8_t*)base + size*less_index, (uint8_t*)base + size*central_index) > 0) {
+			memswp((uint8_t*)base + size*less_index, (uint8_t*)base + size*big_index, size);
+			big_index++;
+		} else {
+			less_index++;
+		}
+	}
+
+//	puts("Array after sorting:");
+//	for(size_t i = begin; i < end; i++) {
+//		printf("%i\n", *((int*)base + i));
+//	}
+	slow_qsort_internal(base, size, compare, begin, central_index);
+	if(central_index != end) slow_qsort_internal(base, size, compare, central_index+1, end);
+//	puts("Array after recursive sorting:");
+//	for(size_t i = begin; i < end; i++) {
+//		printf("%i\n", *((int*)base + i));
+//	}
+}
+
+void slow_qsort(void *base, size_t n, size_t size, int (*compare)(const void *left, const void *right)) {
+	srand((unsigned int)time(0));
+	slow_qsort_internal(base, size, compare, 0, n);
 }
 
 void write_string_array(string_array array, FILE *file) {
