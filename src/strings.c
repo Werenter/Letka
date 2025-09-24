@@ -82,11 +82,11 @@ int compare_strings_without_special_symbols(const char *str1, const char *str2) 
 		else if(*str1 == '\0') return -1;
 		else if(*str2 == '\0') return 1;
 
-		if(!isalpha(*str1)) {
+		if(!(isalpha(*str1) || *str1 < 0)) {
 			str1++;
 			continue;
 		}
-		if(!isalpha(*str2)) {
+		if(!(isalpha(*str2) || *str2 < 0)) {
 			str2++;
 			continue;
 		}
@@ -115,11 +115,11 @@ int compare_strings_without_special_symbols_reversed(const char *str1, const cha
 		else if(ptr1 < str1) return -1;
 		else if(ptr2 < str2) return 1;
 
-		if(!isalpha(*ptr1)) {
+		if(!(isalpha(*ptr1) || *ptr1 < 0)) {
 			ptr1--;
 			continue;
 		}
-		if(!isalpha(*ptr2)) {
+		if(!(isalpha(*ptr2) || *ptr2 < 0)) {
 			ptr2--;
 			continue;
 		}
@@ -150,20 +150,22 @@ int compare_strings_without_special_symbols_reversed_partial(const char *str1, c
 		else if(ptr1 < str1) return -1;
 		else if(ptr2 < str2) return 1;
 
-		if(!isalpha(*ptr1)) {
+		if(!(isalpha(*ptr1) || *ptr1 < 0)) {
 			ptr1--;
 			continue;
 		}
-		if(!isalpha(*ptr2)) {
+		if(!(isalpha(*ptr2) || *ptr2 < 0)) {
 			ptr2--;
 			continue;
 		}
 
 		const char cmp1 = (char)tolower(*ptr1);
 		const char cmp2 = (char)tolower(*ptr2);
+		//printf("%i != %i\n", cmp1, cmp2);
 		if(compared >= complimit) return 0;
 
 		if(cmp1 == cmp2) {
+			//printf("%i != %i\n", cmp1, cmp2);
 			ptr1--;
 			ptr2--;
 		} else if(cmp1 > cmp2) return 1;
@@ -223,7 +225,7 @@ void slowsort(void *base, size_t n, size_t size, int (*compare)(const void *left
 }
 
 static void slow_qsort_internal(void *base, size_t size, int (*compare)(const void *left, const void *right), size_t begin, size_t end) {
-	if(end-begin <= 1) return;
+	if(end <= 1+begin) return;
 
 	size_t central_index = begin+(size_t)rand()%(end-begin);
 	size_t less_count = 0;

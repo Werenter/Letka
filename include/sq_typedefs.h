@@ -15,6 +15,8 @@ typedef enum {
 	STATUS_FILE_OPEN_ERROR, ///< File open not successful
 	STATUS_LOW_PRECISION, ///< Too low precision for calculate
 	STATUS_ALLOCATION_ERROR, ///< Failed to allocate memory
+	STATUS_STRUCTURE_ERROR, ///< Incorrect data structure
+	STATUS_EMPTY, ///< Empty data structure
 } Status_type;
 
 /**

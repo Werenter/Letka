@@ -34,15 +34,15 @@ static void generate_ryphm_pair(string_array *array, size_t *index1, size_t *ind
 
 	size_t end_index = begin_index;
 	if(direction == 0) {
-		for(size_t i = begin_index; i < array->index_size; i++) {
-			if(compare_strings_without_special_symbols_reversed_partial(array->index[begin_index], array->index[i], 2) != 0) {
+		for(size_t i = begin_index+1; i < array->index_size; i++) {
+			if(compare_strings_without_special_symbols_reversed_partial(array->index[begin_index], array->index[i], 4) != 0) {
 				end_index = i-1;
 				break;
 			}
 		}
 	} else {
-		for(size_t i = begin_index; i > 0; i--) {
-			if(compare_strings_without_special_symbols_reversed_partial(array->index[begin_index], array->index[i], 2) != 0) {
+		for(size_t i = begin_index-1; i >= 0; i--) {
+			if(compare_strings_without_special_symbols_reversed_partial(array->index[begin_index], array->index[i], 4) != 0) {
 				end_index = begin_index;
 				begin_index = i+1;
 				break;
@@ -51,6 +51,7 @@ static void generate_ryphm_pair(string_array *array, size_t *index1, size_t *ind
 	}
 
 	*index1 = begin_index;
+	//printf("%lu %lu\n", begin_index, end_index);
 	*index2 = begin_index + ((size_t)rand())%(end_index+1-begin_index);
 }
 
@@ -63,8 +64,8 @@ static void write_bred(string_array *array, FILE *file, int iterations) {
 		size_t index2 = 0;
 		size_t index3 = 0;
 		size_t index4 = 0;
-		generate_ryphm_pair(array, &index1, &index4);
-		generate_ryphm_pair(array, &index2, &index3);
+		generate_ryphm_pair(array, &index1, &index3);
+		generate_ryphm_pair(array, &index2, &index4);
 
 		fputs(array->index[index1], file); fputc('\n', file);
 		fputs(array->index[index2], file); fputc('\n', file);
