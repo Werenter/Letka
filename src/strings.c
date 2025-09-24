@@ -135,6 +135,43 @@ int compare_strings_without_special_symbols_reversed(const char *str1, const cha
 	}
 }
 
+int compare_strings_without_special_symbols_reversed_partial(const char *str1, const char *str2, size_t complimit) {
+	const size_t len1 = strlen(str1);
+	const size_t len2 = strlen(str2);
+	if(len1 == 0 && len2 == 0) return 0;
+	else if(len1 == 0 && len2 > 0) return -1;
+	else if(len1 > 0 && len2 == 0) return 1;
+	const char *ptr1 = str1+len1;
+	const char *ptr2 = str2+len2;
+
+	size_t compared = 0;
+	while(true) {
+		if(ptr1 < str1 && ptr2 < str2) return 0;
+		else if(ptr1 < str1) return -1;
+		else if(ptr2 < str2) return 1;
+
+		if(!isalpha(*ptr1)) {
+			ptr1--;
+			continue;
+		}
+		if(!isalpha(*ptr2)) {
+			ptr2--;
+			continue;
+		}
+
+		const char cmp1 = (char)tolower(*ptr1);
+		const char cmp2 = (char)tolower(*ptr2);
+		if(compared >= complimit) return 0;
+
+		if(cmp1 == cmp2) {
+			ptr1--;
+			ptr2--;
+		} else if(cmp1 > cmp2) return 1;
+		else if(cmp1 < cmp2) return -1;
+		compared++;
+	}
+}
+
 #define SWAP_MEMORY(type,size,mem1,mem2,idx) {\
 	type temp = *((type*)mem1+idx/size);\
 	*((type*)mem1+idx/size) = *((type*)mem2+idx/size);\

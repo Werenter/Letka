@@ -112,3 +112,18 @@ void write_string_array(string_array array, FILE *file);
  * @param [in] size Count of bytes for swap.
  */
 void memswp(void *mem1, void *mem2, size_t size);
+
+/**
+ * This function compares two strings ignoring special symbols and 
+ * symbol register. For example, "Abc ds" is equal to "abcds".
+ * Behaivour is equalient to compare_strings_without_special_symbols_reversed,
+ * but checked symbol count limited by complimit param. For example, 
+ * "abcdef" and "aaef" are equal with complimit=2.
+ *
+ * @param [in] str1 First string for compare
+ * @param [in] str2 Second string for compare
+ * @param [in] complimit Count if chars to compare
+ *
+ * @return 0 if str1 and str2 are equal, 1 if str1>str2, -1 if str1<str2
+ */
+int compare_strings_without_special_symbols_reversed_partial(const char *str1, const char *str2, size_t complimit);
