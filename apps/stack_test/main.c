@@ -5,7 +5,7 @@
 int main(void) {
 	StackInt stack = {};
 	Status_type err = STATUS_OK;
-	stack_int_init(&stack, &err);
+	stack_int_init(&stack, 1.5, &err);
 	if(err != STATUS_OK) printf("Error code: %u\n", err);
 
 	for(int i = 0; i < 500; i++) {
@@ -13,9 +13,11 @@ int main(void) {
 		if(err != STATUS_OK) printf("Error code: %u\n", err);
 	}
 
+	//stack.data[1] = 5;
 	for(int i = 0; i < 500; i++) {
 		printf("%i\n", stack_int_pop(&stack, &err));
 		if(err != STATUS_OK) printf("Error code: %u\n", err);
 	}
-	stack_int_destroy(&stack);
+	stack_int_destroy(&stack, &err);
+	if(err != STATUS_OK) printf("Destroy error code: %u\n", err);
 }

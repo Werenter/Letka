@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdlib.h>
 
 #include "sq_typedefs.h"
@@ -7,6 +9,10 @@
  * Stack of int elements.
  */
 typedef struct {
+	/**
+	 * First canary for checking structure integrity
+	 */
+	int begin_canary;
 	/**
 	 * Stack memory block
 	 */
@@ -19,6 +25,22 @@ typedef struct {
 	 * Allocated space size (must be greater or equal to size)
 	 */
 	size_t capacity;
+	/**
+	 * Checksum for checking structure integrity
+	 */
+	size_t structure_checksum;
+	/**
+	 * Checksum for checking stack integrity
+	 */
+	size_t stack_checksum;
+	/**
+	 * Coefficient for calculation stack reallocations
+	 */
+	double realloc_coefficient;
+	/**
+	 * Second canary for checking structure integrity
+	 */
+	int end_canary;
 } StackInt;
 
 
@@ -26,18 +48,21 @@ typedef struct {
  * Create empty stack.
  *
  * @param [out] stack Pointer to stack structure
+ * @param [in] realloc_coefficient Coefficient for calculating size. For example, with k=3
+ * size will increase for tree times, and size will be shrinked, when capacity/size>9.
+ * Must be greater than 1.2
  * @param [out] err Optional pointer (can be NULL) to
  * variable for saving status. STATUS_OK if no errors,
  * STATUS_ALLOCATION_ERROR if memory allocation error.
  */
-void stack_int_init(StackInt *stack, Status_type *err);
+void stack_int_init(StackInt *stack, double realloc_coefficient, Status_type *err);
 
 /**
  * Destroy stack.
  *
  * @param [in] stack Stack for destroying.
  */
-void stack_int_destroy(StackInt *stack);
+void stack_int_destroy(StackInt *stack, Status_type *err);
 
 /**
  * Push element to stack.
@@ -79,3 +104,10 @@ int stack_int_pop(StackInt *stack, Status_type *err);
  * @return Element that removed from array.
  */
 int stack_int_top(StackInt *stack, Status_type *err);
+
+/**
+ * Dump stack to logfile
+ *
+ * @param [in] stack Stack for dumping
+ */
+void stack_int_dump(const StackInt *stack);

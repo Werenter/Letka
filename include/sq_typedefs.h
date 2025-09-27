@@ -17,6 +17,9 @@ typedef enum {
 	STATUS_ALLOCATION_ERROR, ///< Failed to allocate memory
 	STATUS_STRUCTURE_ERROR, ///< Incorrect data structure
 	STATUS_EMPTY, ///< Empty data structure
+	STATUS_CANARY_ERROR,  ///< Broken canary
+	STATUS_CHECKSUM_ERROR,  ///< Broken checksum
+	STATUS_COEFFICIENT_ERROR, ///< Incorrect coefficient for resize
 } Status_type;
 
 /**
