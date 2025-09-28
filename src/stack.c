@@ -17,6 +17,7 @@ static size_t calculate_checksum(const void *data, size_t size);
 static Status_type stack_realloc(StackInt *stack, size_t newsize);
 
 static Status_type integrity_check(StackInt *stack) {
+#ifndef NDEBUG
 	assert(stack != NULL);
 
 	if(stack->begin_canary != struct_canary || stack->end_canary != struct_canary) 
@@ -33,14 +34,19 @@ static Status_type integrity_check(StackInt *stack) {
 
 	if(calculate_stack_checksum(stack) != stack->stack_checksum)
 		return STATUS_CHECKSUM_ERROR;
+#endif
 
 	return STATUS_OK;
 }
 
 static size_t calculate_checksum(const void *data, size_t size) {
+#ifndef NDEBUG
 	size_t chksum = 0;
 	for(size_t i = 0; i < size; i++) chksum += ((const uint8_t*)data)[i];
 	return chksum;
+#else
+	return 0;
+#endif
 }
 
 static size_t calculate_structure_checksum(StackInt *stack) {
@@ -131,9 +137,6 @@ static Status_type stack_realloc(StackInt *stack, size_t newsize) {
 	return ret;
 }
 
-// TODO: Custom coefficients
-//
-// TODO: Write calculator
 void stack_int_push(int elem, StackInt *stack, Status_type *err) {
 	assert(stack != NULL);
 	Status_type err_code = integrity_check(stack);
