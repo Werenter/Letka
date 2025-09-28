@@ -210,3 +210,26 @@ void stack_int_dump(const StackInt *stack) {
 		LOG_ERROR("stack[%lu]: %i\n", i, stack->data[i]);
 	}
 }
+
+void print_stack(StackInt *stack, FILE *file, Status_type *err) {
+	assert(stack != NULL);
+	assert(file != NULL);
+
+	Status_type err_code = integrity_check(stack);
+	if(err_code != STATUS_OK) {
+		if(err != NULL) *err = err_code;
+		return;
+	}
+
+	if(fputs("Stack data:\n", file) == EOF) {
+		if(err != NULL) *err = STATUS_WRITE_ERROR;
+		return;
+	}
+	for(size_t i = 0; i < stack->size; i++) {
+		if(fprintf(file, "[%lu]: %i\n", i, stack->data[i+1]) < 0) {
+			if(err != NULL) *err = STATUS_WRITE_ERROR;
+			return;
+		}
+	}
+	if(err != NULL) *err = STATUS_OK;
+}

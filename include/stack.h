@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "sq_typedefs.h"
 
@@ -111,3 +112,12 @@ int stack_int_top(StackInt *stack, Status_type *err);
  * @param [in] stack Stack for dumping
  */
 void stack_int_dump(const StackInt *stack);
+
+/**
+ * Print stack to file
+ *
+ * @param [in] stack Stack for printing
+ * @param [in] file File for printing data
+ * @param [out] err Optional error code (may be NULL)
+ */
+void print_stack(StackInt *stack, FILE *file, Status_type *err);

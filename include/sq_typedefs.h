@@ -20,6 +20,7 @@ typedef enum {
 	STATUS_CANARY_ERROR,  ///< Broken canary
 	STATUS_CHECKSUM_ERROR,  ///< Broken checksum
 	STATUS_COEFFICIENT_ERROR, ///< Incorrect coefficient for resize
+	STATUS_WRITE_ERROR, ///< IO write error
 } Status_type;
 
 /**
