@@ -26,6 +26,7 @@ static void command_sqrt(StackInt *stack);
 	stack_int_push(a operation b, stack, &err3);\
 	if(err1 != STATUS_OK || err2 != STATUS_OK || err3 != STATUS_OK) {\
 		LOG_ERROR("Internal stack error: %u %u %u\n", err1, err2, err3);\
+		STACK_INT_DUMP(stack);\
 	}\
 }
 
@@ -58,6 +59,7 @@ static void command_sqrt(StackInt *stack) {
 	stack_int_push((int)sqrt((double)a), stack, &err2);
 	if(err1 != STATUS_OK || err2 != STATUS_OK) {
 		LOG_ERROR("Internal stack error: %u %u\n", err1, err2);
+		STACK_INT_DUMP(stack);
 	}
 }
 

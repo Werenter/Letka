@@ -3,7 +3,6 @@
 #include <stdint.h>
 
 #include "stack.h"
-#include "logger.h"
 
 // TODO: Variable canary size
 #define BEGIN_STACK_CAPACITY 64
@@ -203,16 +202,7 @@ int stack_int_top(StackInt *stack, Status_type *err) {
 }
 
 // TODO: Refactor dump
-void stack_int_dump(const StackInt *stack) {
-	LOG_ERROR("Stack dump:\n");
-	LOG_ERROR("Stack size: %lu\n", stack->size);
-	LOG_ERROR("Stack capacity: %lu\n", stack->capacity);
-	LOG_ERROR("Stack canary: %i\n", canary);
-	LOG_ERROR("Stack:\n");
-	for(size_t i = 0; i < stack->capacity+2; i++) {
-		LOG_ERROR("stack[%lu]: %i\n", i, stack->data[i]);
-	}
-}
+
 
 void print_stack(StackInt *stack, FILE *file, Status_type *err) {
 	assert(stack != NULL);

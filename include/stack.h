@@ -4,6 +4,9 @@
 #include <stdio.h>
 
 #include "sq_typedefs.h"
+#include "logger.h"
+
+extern const int canary;
 
 /**
  * Structure for saving stack data.
@@ -111,7 +114,16 @@ int stack_int_top(StackInt *stack, Status_type *err);
  *
  * @param [in] stack Stack for dumping
  */
-void stack_int_dump(const StackInt *stack);
+#define STACK_INT_DUMP(stack) {\
+	LOG_ERROR("Stack dump:\n");\
+	LOG_ERROR("Stack size: %lu\n", stack->size);\
+	LOG_ERROR("Stack capacity: %lu\n", stack->capacity);\
+	LOG_ERROR("Stack canary: %i\n", canary);\
+	LOG_ERROR("Stack:\n");\
+	for(size_t i = 0; i < stack->capacity+2; i++) {\
+		LOG_ERROR("stack[%lu]: %i\n", i, stack->data[i]);\
+	}\
+}
 
 /**
  * Print stack to file
