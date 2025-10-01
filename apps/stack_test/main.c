@@ -16,6 +16,7 @@ static void command_sqrt(StackInt *stack);
 #define BINARY_OPERATION(stack, operation, name) {\
 	if(stack->size < 2) {\
 		colored_fprintf(CYAN, stdout, "Stack must have at least two elements for " name " command\n");\
+		return;\
 	}\
 	\
 	Status_type err1 = STATUS_OK;\
