@@ -21,6 +21,7 @@ typedef enum {
 	STATUS_CHECKSUM_ERROR,  ///< Broken checksum
 	STATUS_COEFFICIENT_ERROR, ///< Incorrect coefficient for resize
 	STATUS_WRITE_ERROR, ///< IO write error
+	STATUS_SYNTAX_ERROR, ///< Syntax error
 } Status_type;
 
 /**

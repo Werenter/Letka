@@ -6,3 +6,4 @@ latex
 objects.mk
 *.html
 onegin_out
+*.microcpu

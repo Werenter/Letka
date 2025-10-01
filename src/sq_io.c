@@ -155,7 +155,7 @@ Status_type read_file(const char *path, char **read_buffer, size_t *file_size) {
 	hard_assert(path != NULL, "read_file has NULL pointer");
 	hard_assert(read_buffer != NULL, "read_file has NULL pointer");
 
-	FILE *file = fopen(path, "r");
+	FILE *file = fopen(path, "rb");
 	if(file == NULL) return STATUS_READ_ERROR;
 
 	long filesize = get_filesize(file);

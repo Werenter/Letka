@@ -9,8 +9,8 @@
 const int canary = 0x20D1FADA;
 const int struct_canary = 0x34C1BAAA;
 
-static Status_type integrity_check(StackInt *stack);
-static size_t calculate_structure_checksum(StackInt *stack);
+static Status_type integrity_check(/* const */ StackInt *stack);
+static size_t calculate_structure_checksum(StackInt *stack); // TODO: const и дальше куча
 static size_t calculate_stack_checksum(StackInt *stack);
 static size_t calculate_checksum(const void *data, size_t size);
 static Status_type stack_realloc(StackInt *stack, size_t newsize);
@@ -151,7 +151,7 @@ void stack_int_push(int elem, StackInt *stack, Status_type *err) {
 	}
 
 	stack->data[++stack->size] = elem;
-	stack->stack_checksum = calculate_stack_checksum(stack);
+	stack->stack_checksum = calculate_stack_checksum(stack); // TODO: add _on_debug to function
 	stack->structure_checksum = calculate_structure_checksum(stack);
 	if(err != NULL) *err = STATUS_OK;
 }
@@ -184,7 +184,7 @@ int stack_int_pop(StackInt *stack, Status_type *err) {
 	return elem;
 }
 
-int stack_int_top(StackInt *stack, Status_type *err) {
+int stack_int_top(/* const */ StackInt *stack, Status_type *err) {
 	assert(stack != NULL);
 	Status_type err_code = integrity_check(stack);
 	if(err_code != STATUS_OK) {

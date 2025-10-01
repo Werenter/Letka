@@ -68,7 +68,7 @@ void mainloop(StackInt *stack) {
 	char command[64];
 	Status_type err = STATUS_OK;
 	while(true) {
-		if(scanf("%63s", command) == EOF) break;
+		if(scanf("%63s", command) == EOF) break; // TODO: fgets
 		if(strlen(command) > 62) {
 			colored_fprintf(RED, stdout, "Incorrect command\n");
 		} else if(!strcmp(command, "PUSH")) {
