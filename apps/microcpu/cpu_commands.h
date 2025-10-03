@@ -19,3 +19,12 @@ const cpu_command cpu_commands[] = {
 	{ "OUT",  0, 7 },
 	{ "HLT",  0, 8 },
 };
+
+#define COMMAND_PUSH 1
+#define COMMAND_ADD  2
+#define COMMAND_SUB  3
+#define COMMAND_MUL  4
+#define COMMAND_DIV  5
+#define COMMAND_SQRT 6
+#define COMMAND_OUT  7
+#define COMMAND_HLT  8
